@@ -2,6 +2,7 @@
 lib.mkProfile "games" {
   home = { ... }: { };
   nixos = { pkgs, ... }: {
+
     environment.systemPackages = with pkgs; [
       mangohud
       protonup-ng

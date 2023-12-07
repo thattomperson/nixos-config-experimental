@@ -1,0 +1,45 @@
+# Cloud VMs
+Host *.four.dev
+	Port 22222
+	User four
+	IdentityFile ~/.ssh/id_ed25519
+	ForwardAgent yes
+	SetEnv GIT_COMMITTER_NAME="Thomas Albrighton" GIT_COMMITTER_EMAIL="thomas.albrighton@four.io" GIT_AUTHOR_NAME="Thomas Albrighton" GIT_AUTHOR_EMAIL="thomas.albrighton@four.io"
+
+# DEV/UAT
+Host dev-ops
+	User product
+	HostName 54.253.192.69
+	Port 22222
+	IdentityFile ~/.ssh/id_ed25519
+	ForwardAgent yes
+	SetEnv GIT_COMMITTER_NAME="Thomas Albrighton" GIT_COMMITTER_EMAIL="thomas.albrighton@four.io" GIT_AUTHOR_NAME="Thomas Albrighton" GIT_AUTHOR_EMAIL="thomas.albrighton@four.io"
+
+Host dev-0* dev-1* iot-2* uat-0* uat-1*
+	ProxyJump %r@dev-ops
+	IdentityFile ~/.ssh/id_ed25519
+	SetEnv GIT_COMMITTER_NAME="Thomas Albrighton" GIT_COMMITTER_EMAIL="thomas.albrighton@four.io" GIT_AUTHOR_NAME="Thomas Albrighton" GIT_AUTHOR_EMAIL="thomas.albrighton@four.io"
+
+Host dev-0* uat-0* iot-2*
+	User product
+
+Host dev-1* uat-1*
+	User delivery
+
+# PROD
+Host *.prod-3
+	IdentityFile ~/.ssh/id_ed25519
+	ForwardAgent yes
+	User delivery
+	SetEnv GIT_COMMITTER_NAME="Thomas Albrighton" GIT_COMMITTER_EMAIL="thomas.albrighton@four.io" GIT_AUTHOR_NAME="Thomas Albrighton" GIT_AUTHOR_EMAIL="thomas.albrighton@four.io"
+
+Host ops.prod-3 ops.prod-3.four.io
+	User delivery
+	HostName ops.prod-3.four.io
+	Port 22222
+
+Host !ops.prod-3 *.prod-3
+	ProxyJump ops.prod-3
+
+Host sentry.prod-3
+	HostName 10.3.10.173
